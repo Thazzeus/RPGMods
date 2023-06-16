@@ -6,10 +6,10 @@ using Unity.Entities;
 
 namespace RPGMods.Hooks
 {
-    [HarmonyPatch(typeof(VampireDownedServerEventSystem), nameof(VampireDownedServerEventSystem.OnUpdate))]
-    public class VampireDownedServerEventSystem_Patch
+    [HarmonyPatch(typeof(UserDownedServerEvent), nameof(UserDownedServerEvent.OnUpdate))]
+    public class UserDownedServerEvent_Patch
     {
-        public static void Postfix(VampireDownedServerEventSystem __instance)
+        public static void Postfix(UserDownedServerEvent __instance)
         {
             //if (__instance.__OnUpdate_LambdaJob0_entityQuery == null) return;
 
@@ -18,9 +18,9 @@ namespace RPGMods.Hooks
 
             foreach(var entity in EventsQuery)
             {
-                VampireDownedServerEventSystem.TryFindRootOwner(entity, 1, em, out var Victim);
+                UserDownedServerEvent.TryFindRootOwner(entity, 1, em, out var Victim);
                 Entity Source = em.GetComponentData<VampireDownedBuff>(entity).Source;
-                VampireDownedServerEventSystem.TryFindRootOwner(Source, 1, em, out var Killer);
+                UserDownedServerEvent.TryFindRootOwner(Source, 1, em, out var Killer);
 
                 //-- Update PvP Stats & Check
                 if (em.HasComponent<PlayerCharacter>(Killer) && em.HasComponent<PlayerCharacter>(Victim) && !Killer.Equals(Victim))
